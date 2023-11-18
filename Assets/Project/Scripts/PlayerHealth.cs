@@ -18,12 +18,12 @@ public class PlayerHealth : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             TakeDamage(damageToGive);
-            this.gameObject.GetComponent<PlayerMovement>().Jump();
+            // this.gameObject.GetComponent<PlayerMovement>().Jump();
         }
     }
 
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
