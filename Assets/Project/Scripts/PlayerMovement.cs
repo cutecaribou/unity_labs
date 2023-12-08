@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isOnGround = true;
 
     public PlayerHealth playerHealth;
+    bool fallDamageFlag = false;
 
     Vector3 lastPosition;
     void Start()
@@ -40,9 +41,15 @@ public class PlayerMovement : MonoBehaviour
             isOnGround = false;
         }
 
+        if (fallDamageFlag && rb.position.y >= -1) {
+            fallDamageFlag = false;
+            playerHealth.TakeDamage(1);
+        }
+
         if (rb.position.y < -10) {
-            if (playerHealth)
-                playerHealth.TakeDamage(1);
+            // if (playerHealth)
+            //     playerHealth.TakeDamage(1);
+            fallDamageFlag = true;
             rb.velocity = new Vector3(0f, 0f, 0f);
             gameObject.transform.position = lastPosition + new Vector3(0f, 2f, 0f);
         }
