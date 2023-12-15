@@ -9,18 +9,26 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
     private Vector3 moveDirection;
     public bool isOnGround = true;
-
+    private Animator animator;
     public PlayerHealth playerHealth;
     bool fallDamageFlag = false;
 
     Vector3 lastPosition;
+
+    // 
+    private bool isJumping;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
+        // 
+        Physics.gravity = new Vector3 (0, -15, 0);
+
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -32,11 +40,19 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDirection), 5f * Time.deltaTime);
             // rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
-        } 
-        rb.velocity = moveDirection * movementSpeed + new Vector3(0f, rb.velocity.y, 0f);
 
+            animator.SetBool("isMoving", true);
+        } 
+        else
+        {
+            animator.SetBool("isMoving", false);  
+        }
+
+        rb.velocity = moveDirection * movementSpeed + new Vector3(0f, rb.velocity.y, 0f);
+  
         if (Input.GetButtonDown("Jump") && isOnGround)
         {
+            // animator.SetBool("isJumping", true); 
             Jump();
             isOnGround = false;
         }
@@ -56,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void Jump()
-    {
+    {        
         rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
     }
 

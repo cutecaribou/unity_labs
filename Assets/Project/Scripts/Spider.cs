@@ -18,12 +18,12 @@ public class Spider : MonoBehaviour
 
     int next_idx() {
         int vnext_idx = curPointIdx + 1;
-        Debug.Log("Length: " + waypoints.Length.ToString()); 
+        // Debug.Log("Length: " + waypoints.Length.ToString()); 
         if (vnext_idx >= waypoints.Length)
         {
             vnext_idx = 0;
         }
-        Debug.Log("Next: " + vnext_idx.ToString()); 
+        // Debug.Log("Next: " + vnext_idx.ToString()); 
         return vnext_idx;
     }
 
