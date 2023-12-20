@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerState : MonoBehaviour
 {
     [SerializeField] private float startingHealth;
     public float currentHealth {get; private set;} 
     int damageToGive = 1;
+    public GameObject deathPanel;
+
 
     void Awake()
     {
         currentHealth = startingHealth;
+        deathPanel.SetActive(false);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -18,21 +22,39 @@ public class PlayerHealth : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             TakeDamage(damageToGive);
-            // this.gameObject.GetComponent<PlayerMovement>().Jump();
         }
+        
+        // if (collision.gameObject.CompareTag("Flag"))
+        // {
+        //     deathPanel.transform.Find("InfoText").GetComponent<TextMeshProUGUI>().text = "Congratulations!";
+        //     deathPanel.SetActive(true);
+
+        // }
     }
 
+    void OnTriggerEnter(Collider other)
+    {        
+        if (other.gameObject.CompareTag("Flag"))
+        {
+            deathPanel.transform.Find("InfoText").GetComponent<TextMeshProUGUI>().text = "Congratulations!";
+            deathPanel.SetActive(true);
+
+        }
+    }
 
     public void TakeDamage(int damage)
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
-            Debug.Log("Hurt");
+            // Debug.Log("Hurt");
         }
         else
         {
-            Debug.Log("Die");
+            // Debug.Log("Die");
+
+            deathPanel.SetActive(true);
+
         }
     }
 

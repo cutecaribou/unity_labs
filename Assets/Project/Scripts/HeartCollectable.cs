@@ -10,7 +10,7 @@ public class HeartCollectable : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerHealth>().AddHealth(healthValue);
+            other.gameObject.GetComponent<PlayerState>().AddHealth(healthValue);
             Destroy(gameObject);
         }
     }

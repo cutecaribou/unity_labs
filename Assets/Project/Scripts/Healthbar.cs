@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Healthbar : MonoBehaviour
 {
-    [SerializeField] private PlayerHealth playerHealth;
+    [SerializeField] private PlayerState playerHealth;
     [SerializeField] private Image totalHealthBar;
     [SerializeField] private Image curHealthBar;
     

@@ -38,7 +38,7 @@ public class Spider : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         if (Vector3.Distance(transform.position, waypoints[curPointIdx].transform.position) < 2f) {
-            Debug.Log(Vector3.Distance(transform.position, col.transform.position));
+            // Debug.Log(Vector3.Distance(transform.position, col.transform.position));
             curPointIdx = next_idx();
             // Debug.Log("Changing points");   
         }

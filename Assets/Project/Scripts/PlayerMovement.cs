@@ -10,24 +10,24 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDirection;
     public bool isOnGround = true;
     private Animator animator;
-    public PlayerHealth playerHealth;
+    public PlayerState playerHealth;
     bool fallDamageFlag = false;
 
     Vector3 lastPosition;
-
-    // 
-    private bool isJumping;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
+        Physics.gravity = new Vector3 (0, -15, 0);
     }
 
     void Update()
     {
-        // 
-        Physics.gravity = new Vector3 (0, -15, 0);
+        
+        if (playerHealth.currentHealth <= 0){
+            return;
+        }
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -52,9 +52,12 @@ public class PlayerMovement : MonoBehaviour
   
         if (Input.GetButtonDown("Jump") && isOnGround)
         {
-            // animator.SetBool("isJumping", true); 
-            Jump();
-            isOnGround = false;
+            Jump();        
+        }
+
+        if (isOnGround)
+        {
+            animator.SetBool("isJumping", false);
         }
 
         if (fallDamageFlag && rb.position.y >= -1) {
@@ -63,8 +66,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (rb.position.y < -10) {
-            // if (playerHealth)
-            //     playerHealth.TakeDamage(1);
             fallDamageFlag = true;
             rb.velocity = new Vector3(0f, 0f, 0f);
             gameObject.transform.position = lastPosition + new Vector3(0f, 2f, 0f);
@@ -72,8 +73,13 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void Jump()
-    {        
-        rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+    {
+        if (isOnGround)
+        {
+            isOnGround = false;
+            rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+            animator.SetBool("isJumping", true);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -81,9 +87,19 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+
             if (!collision.gameObject.GetComponent("WaypointFollower")) {
                 lastPosition = collision.transform.position;
             }
         }
     }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = false;
+        }
+    }
+
 }
